@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Chat with Our Bot</h1>
+        </div>
+        <div class="chatbox" id="chatbox">
+            <!-- Chat messages will be appended here -->
+        </div>
+        <div class="chat-footer">
+            <button id="icon-button" onclick="openIconSelection()">Change User Icon</button>
+            <form id="chat-form">
+                <input type="text" id="message-input" placeholder="Type your message..." required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Icon Selection Modal -->
+    <div id="iconSelectionModal" class="icon-selection-modal">
+        <p>Select Your Icon:</p>
+        <div class="icon-options">
+            <img src="{{ url_for('static', filename='icon1.png') }}" class="icon-option" onclick="selectIcon('icon1.png')" />
+            <img src="{{ url_for('static', filename='icon2.png') }}" class="icon-option" onclick="selectIcon('icon2.png')" />
+            <img src="{{ url_for('static', filename='icon3.png') }}" class="icon-option" onclick="selectIcon('icon3.png')" />
+            <img src="{{ url_for('static', filename='icon4.jpg') }}" class="icon-option" onclick="selectIcon('icon4.jpg')" />
+            <img src="{{ url_for('static', filename='icon5.jpg') }}" class="icon-option" onclick="selectIcon('icon5.jpg')" />
+            <img src="{{ url_for('static', filename='icon6.jpg') }}" class="icon-option" onclick="selectIcon('icon6.jpg')" />
+            <img src="{{ url_for('static', filename='icon7.jpg') }}" class="icon-option" onclick="selectIcon('icon7.jpg')" />
+            <img src="{{ url_for('static', filename='icon8.jpg') }}" class="icon-option" onclick="selectIcon('icon8.jpg')" />
+            <img src="{{ url_for('static', filename='icon9.jpg') }}" class="icon-option" onclick="selectIcon('icon9.jpg')" />
+            <img src="{{ url_for('static', filename='icon10.jpg') }}" class="icon-option" onclick="selectIcon('icon10.jpg')" />
+            <img src="{{ url_for('static', filename='icon11.jpg') }}" class="icon-option" onclick="selectIcon('icon11.jpg')" />
+            <img src="{{ url_for('static', filename='icon12.jpg') }}" class="icon-option" onclick="selectIcon('icon12.jpg')" />
+            <img src="{{ url_for('static', filename='icon13.jpg') }}" class="icon-option" onclick="selectIcon('icon13.jpg')" />
+            <img src="{{ url_for('static', filename='icon14.jpg') }}" class="icon-option" onclick="selectIcon('icon14.jpg')" />
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('chat-form');
+        const chatbox = document.getElementById('chatbox');
+        let selectedUserIcon = 'icon1.png'; // Default user icon
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const userMessage = document.getElementById('message-input').value;
+            appendMessage('You', userMessage);
+            
+            fetch('/get_response', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `message=${encodeURIComponent(userMessage)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                appendMessage('Bot', data.message);
+            })
+            .catch(error => {
+                appendMessage('Bot', 'Sorry, there was an error.');
+            });
+            
+            document.getElementById('message-input').value = '';
+        });
+
+        function appendMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+
+            if (sender === 'Bot') {
+                messageElement.innerHTML = `
+                    <div class="bot-avatar">
+                        <img src="{{ url_for('static', filename='bot-avatar.png') }}" alt="Bot Avatar">
+                    </div>
+                    <div class="message-content">
+                        <strong>${sender}:</strong> ${message}
+                    </div>
+                `;
+            } else {
+                messageElement.innerHTML = `
+                    <div class="user-avatar">
+                        <img src="${selectedUserIcon ? '{{ url_for("static", filename="") }}' + selectedUserIcon : '{{ url_for("static", filename="icon1.png") }}'}" alt="User Icon">
+                    </div>
+                    <div class="message-content">
+                        <strong>${sender}:</strong> ${message}
+                    </div>
+                `;
+            }
+
+            chatbox.appendChild(messageElement);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+
+        function openIconSelection() {
+            document.getElementById("iconSelectionModal").style.display = "block";
+        }
+
+        function selectIcon(iconPath) {
+            selectedUserIcon = iconPath;
+            document.getElementById("iconSelectionModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>
