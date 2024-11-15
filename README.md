@@ -1,7 +1,7 @@
 
 # Chatbot Web Application
 
-This is a Flask-based chatbot application that allows users to communicate with an AI chatbot. The user interface supports customization by allowing users to change their icons during conversation. The app is deployed on AWS, making it accessible from anywhere.
+This is a Flask-based chatbot application that allows users to communicate with an AI chatbot. The user interface supports customization by allowing users to change their icons during conversation. The app is deployed on AWS, making it accessible from anywhere. This is developed by Ankit Deb and Prity Bhattacharyya under the supervision of Dr. Ajanta Das.
 
 ## Features
 - **User-friendly Interface:** A simple and intuitive layout using HTML, CSS, and JavaScript.
